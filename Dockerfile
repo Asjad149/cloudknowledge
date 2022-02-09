@@ -1,5 +1,12 @@
 FROM centos:latest
 MAINTAINER sanjay.dahiya332@gmail.com
+FROM registry.access.redhat.com/rhel7/rhel AS builder
+RUN yum install unzip
+ADD myfile.zip /dist
+RUN cd /dist && unzip myfile.zip && rm myfile.zip
+
+FROM registry.access.redhat.com/rhel7/rhel
+COPY --from=builder /dist/ /target
 RUN yum install -y httpd \ 
 zip \
 unzip
